@@ -1,26 +1,5 @@
-# Backend COAP
-
-## Run project
-Run server :  
-``` python3 main.py ``` 
-
-If you want to test without a client as an arduino you use the test client :  
-Run the client test :  
-```python3 ./test/client.py```
-
-### pre-requisites :  
- - aiocoap
-
-# Backend HTTP
-
-**Par pitie je ne fais pas le back http et websocket - Romeo**
-
-# Front
-Le front est dans le dossier [`UI-IoT`](/UI-Iot).
-
-Dans [`src/App.vue`](/src/App.vue) il y a du code a décommenter dans la section `script setup` qui correspond au *JavaScript* de la page !!!
-
-Il faut créer un serveur websocket pour avoir en temps réel les infos ...
+# UI-IoT
+Dans [`src/App.vue`](/src/App.vue) il y a du code a décommenter !!! Il faut créer un serveur websocket pour avoir en temps réel les infos ...
 
 ## Project Setup
 Se situer dans le dossier UI-IoT/

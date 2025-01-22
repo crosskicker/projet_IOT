@@ -1,0 +1,134 @@
+<script setup>
+
+/* A DECOMMENTER POUR UTILISER
+  import { onBeforeUnmount } from 'vue'
+  // utiliser les websockets pour rester connecté au serveur pour les alertes sauf si tu proposes mieux
+  const socket = new WebSocket('ws://localhost');
+
+  // Lorsque la connexion est ouverte
+  socket.onopen = () => {
+    console.log('Connecté au serveur');
+    // socket.send(JSON.stringify({ type: 'hello', message: 'Salut serveur!' }));
+  };
+
+  // Lorsque des données sont reçues
+  // event.data = userList
+  socket.onmessage = (event) => {
+    console.log('Message reçu');
+    userList = event.data;
+  };
+
+  onBeforeUnmount(() => {
+    // En cas de fermeture
+    socket.onclose = () => {
+    console.log('Connexion fermée par le serveur');
+  })
+*/
+/*
+USER MODELE
+{
+  nodeid:0,
+  nom:"Martin",
+  prenom:"Jean",
+  chambre:101,
+  etat:"normal"-"alerte cardiaque"-"alerte chute"
+}
+*/
+// Variable a recup dans le endpoint GET"/userList"
+const userList = [
+  {
+    "nodeid": 0,
+    "nom": "Martin",
+    "prenom": "Jean",
+    "chambre": 101,
+    "etat": "normal"
+  },
+  {
+    "nodeid": 1,
+    "nom": "Dupont",
+    "prenom": "Marie",
+    "chambre": 102,
+    "etat": "normal"
+  },
+  {
+    "nodeid": 2,
+    "nom": "Durand",
+    "prenom": "Luc",
+    "chambre": 103,
+    "etat": "alerte cardiaque"
+  }
+]
+
+const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat"];
+
+
+</script>
+
+<template>
+  <div id="core">
+    <h1>Centre de contr&ocirc;le</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th v-for="key in pattern" v-html=key></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in userList" :class="{alert : user.etat!=='normal'}">
+          <td v-for="value in Object.values(user)">{{ value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<style scoped>
+#core {
+  display: flex;
+  /* background-color: rgb(255, 204, 204); */
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  margin-top: 20px;
+}
+
+h1 {
+  font-size: 46px;
+}
+
+table {
+  border: 1px black solid;
+  border-radius: 5px;
+  border-spacing: 0px;
+  width: 50%;
+  min-width: 512px;
+  max-width: 1024px;
+  display: table;
+}
+
+thead {
+  background-color: var( --vt-c-white-mute);
+  width: 100%;
+}
+
+th {
+  padding: 0px;
+  margin: 0px;
+  font-size: large;
+  text-align: left;
+}
+
+tr {
+  padding: 0px;
+  margin: 0px;
+
+}
+
+.alert {
+  background-color: rgb(255, 172, 172);
+}
+
+
+
+</style>
