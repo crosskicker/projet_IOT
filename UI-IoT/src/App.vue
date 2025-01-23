@@ -1,29 +1,32 @@
 <script setup>
+import { computed } from 'vue'
+import { onBeforeUnmount } from 'vue'
+// utiliser les websockets pour rester connecté au serveur pour les alertes sauf si tu proposes mieux
+const socket = new WebSocket('ws://localhost');
 
-/* A DECOMMENTER POUR UTILISER
-  import { onBeforeUnmount } from 'vue'
-  // utiliser les websockets pour rester connecté au serveur pour les alertes sauf si tu proposes mieux
-  const socket = new WebSocket('ws://localhost');
+// Lorsque la connexion est ouverte
+socket.onopen = () => {
+  console.log('Connecté au serveur');
+  // socket.send(JSON.stringify({ type: 'hello', message: 'Salut serveur!' }));
+};
 
-  // Lorsque la connexion est ouverte
-  socket.onopen = () => {
-    console.log('Connecté au serveur');
-    // socket.send(JSON.stringify({ type: 'hello', message: 'Salut serveur!' }));
-  };
+// Lorsque des données sont reçues
+// event.data = userList
+socket.onmessage = (event) => {
+  console.log('Message reçu');
+  userList = JSON.parse(event.data);
+};
 
-  // Lorsque des données sont reçues
-  // event.data = userList
-  socket.onmessage = (event) => {
-    console.log('Message reçu');
-    userList = event.data;
-  };
+// En cas de fermeture
+socket.onclose = () => {
+  console.log('Connexion fermée par le serveur');
+}
 
-  onBeforeUnmount(() => {
-    // En cas de fermeture
-    socket.onclose = () => {
-    console.log('Connexion fermée par le serveur');
-  })
-*/
+
+onBeforeUnmount(() => {
+  socket.close();
+})
+
 /*
 USER MODELE
 {
@@ -59,8 +62,7 @@ const userList = [
   }
 ]
 
-const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat"];
-
+const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat",""];
 
 </script>
 
@@ -74,8 +76,10 @@ const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat"];
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in userList" :class="{alert : user.etat!=='normal'}">
+        <tr v-for="(user, index) in userList" :class="[index ? 'impair' : 'pair', {alert : user.etat!=='normal'}]">
           <td v-for="value in Object.values(user)">{{ value }}</td>
+          <td v-if="user.etat==='normal'"><ion-icon name="checkmark-circle-outline"></ion-icon></td>
+          <td v-else><ion-icon name="alert-circle-outline"></ion-icon></td>
         </tr>
       </tbody>
     </table>
@@ -108,7 +112,7 @@ table {
 }
 
 thead {
-  background-color: var( --vt-c-white-mute);
+  background-color: var(--color-background-mute);
   width: 100%;
 }
 
@@ -122,13 +126,25 @@ th {
 tr {
   padding: 0px;
   margin: 0px;
+}
 
+tr.pair {
+  background-color : var(--color-background);
+}
+
+tr.impair {
+  background-color : var(--color-background-soft);
 }
 
 .alert {
-  background-color: rgb(255, 172, 172);
+  background-color: rgb(255, 172, 172)!important;
 }
 
+ion-icon {
+  position: relative;
+  top : 2px;
+  font-size: 16px;
+}
 
 
 </style>
