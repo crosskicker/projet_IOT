@@ -1,8 +1,10 @@
 <script setup>
-import { computed } from 'vue'
 import { onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
+
+const userList = ref([]);
 // utiliser les websockets pour rester connecté au serveur pour les alertes sauf si tu proposes mieux
-const socket = new WebSocket('ws://localhost');
+const socket = new WebSocket('ws://localhost:8000');
 
 // Lorsque la connexion est ouverte
 socket.onopen = () => {
@@ -14,7 +16,9 @@ socket.onopen = () => {
 // event.data = userList
 socket.onmessage = (event) => {
   console.log('Message reçu');
-  userList = JSON.parse(event.data);
+  console.log(event.data);
+  if (event.data!=="ok")
+    userList.value = [...JSON.parse(event.data)];
 };
 
 // En cas de fermeture
@@ -37,30 +41,6 @@ USER MODELE
   etat:"normal"-"alerte cardiaque"-"alerte chute"
 }
 */
-// Variable a recup dans le endpoint GET"/userList"
-const userList = [
-  {
-    "nodeid": 0,
-    "nom": "Martin",
-    "prenom": "Jean",
-    "chambre": 101,
-    "etat": "normal"
-  },
-  {
-    "nodeid": 1,
-    "nom": "Dupont",
-    "prenom": "Marie",
-    "chambre": 102,
-    "etat": "normal"
-  },
-  {
-    "nodeid": 2,
-    "nom": "Durand",
-    "prenom": "Luc",
-    "chambre": 103,
-    "etat": "alerte cardiaque"
-  }
-]
 
 const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat",""];
 
