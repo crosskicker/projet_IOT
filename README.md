@@ -1,31 +1,12 @@
 # Backend COAP
-
-## Run project
-Run server :  
-``` python3 main.py ``` 
-
-If you want to test without a client as an arduino you use the test client :  
-Run the client test :  
-```python3 ./test/client.py```
-
-### pre-requisites :  
- - aiocoap
-
-# Backend Node.js
-> Laissez moi faire
+## Tutoriel lancement
+1. Se situer dans `backnodejs/`
+2. lancer `nodejs app.js`
+    - Avoir installé **nodejs** et les dépendances, [tutoriel](#installer-nodejs-et-npm)
+3. Le serveur est lancé, accéder à l'interface sur `localhost:8000`, le serveur coap tourne au port par défaut : `5683`
 
 
-# Front
-Le front est dans le dossier [`UI-IoT`](/UI-Iot).
-
-Dans [`src/App.vue`](/src/App.vue) il y a du code a décommenter dans la section `script setup` qui correspond au *JavaScript* de la page !!!
-
-Il faut créer un serveur websocket pour avoir en temps réel les infos ...
-
-## Project Setup
-Se situer dans le dossier UI-IoT/
-
-### Installer nodejs et npm
+## Installer nodejs et npm
 [Installer Node.js](https://nodejs.org/fr/download)
 
 #### Version Linux
@@ -60,18 +41,39 @@ npm -v # Doit afficher "10.9.2".
 ```
 
 ### Instaler les packages necessaire
+Se situer dans un dossier contenant `package.json` (**UI-IoT/** ou **backnodejs/**)
 ```sh
 npm install
 ```
 
-### Compile et run en temps réel le modèle
+### Vue.js seulement
+#### Compile et run en temps réel le modèle
 
 ```sh
 npm run dev
 ```
 
-### Compile et creer les 3 fichiers `.html`, `.css`, `.js`
+#### Compile et creer les 3 fichiers `.html`, `.css`, `.js`
 
 ```sh
 npm run build
 ```
+
+
+## Python **Deprecated**
+### Run project
+Run server :  
+``` python3 main.py ``` 
+
+If you want to test without a client as an arduino you use the test client :  
+Run the client test :  
+```python3 ./test/client.py```
+
+### pre-requisites :  
+ - aiocoap
+
+# Front
+Le front est dans le dossier [`UI-IoT`](/UI-Iot).
+
+## Project Setup
+Se situer dans le dossier UI-IoT/
