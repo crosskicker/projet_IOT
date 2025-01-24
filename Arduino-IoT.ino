@@ -87,13 +87,14 @@ void readHeartRate() {
 
   if (beatAvg < (HEART_RATE_THRESHOLD -10)) {
     MESSAGE_SEND_1 = true;
+    etat = etat | 0;
   }
 
   if (((beatAvg > HEART_RATE_THRESHOLD) || (HEART_RATE_THRESHOLD < 5 && irValue > 50000)) && MESSAGE_SEND_1) {
     Serial.println("Heart rate too high! Sending alert...");
-    IPAddress serverIP(172, 20, 10, 4);
-    coap.put(serverIP, 5683, "urgence", "High heart rate detected!");
+    // coap.put(serverIP, 5683, "urgence", "High heart rate detected!");
     MESSAGE_SEND_1 = false;
+    etat = etat | 1;
   }
 }
 
@@ -107,12 +108,25 @@ void readGY521() {
 
   if (tiltMagnitude < (FALL_THRESHOLD -30)) {
     MESSAGE_SEND_2 = true;
+    etat = etat | 0;
   }
 
   if (tiltMagnitude > FALL_THRESHOLD && MESSAGE_SEND_2) {
     Serial.println("Fall detected! Sending alert...");
-    IPAddress serverIP(172, 20, 10, 4);
-    coap.put(serverIP, 5683, "urgence", "Fall detected!");
+    // coap.put(serverIP, 5683, "2025", "Fall detected!");
+    etat = etat | 2; 
+  }
+}
+
+int etat = 0; // 0 normal, 1 cardiaque, 2 chute
+
+void sendState() {
+  IPAddress serverIP(172, 20, 10, 4); // TODO CHANGER
+  switch(etat) {
+    case 0 : coap.put(serverIP, 5683, "2025/normal", "ok"); break;
+    case 1 : coap.put(serverIP, 5683, "2025/alerte-chute", "Fall detected!"); break;
+    case 2 : coap.put(serverIP, 5683, "2025/alerte-cardiaque", "High heart rate detected!"); break;
+    default :  coap.put(serverIP, 5683, "2025/alerte-TOUT", "pas ok");
   }
 }
 
@@ -136,6 +150,10 @@ void setup() {
   coap.response(COAPResponse);
   coap.start();
 
+  // Initialiser en envoyant une requete (GET) sur /connect/2025
+
+  
+
   // Initialisation des sensors
   initializeMAX30105();
   initializeGY521();
@@ -146,5 +164,6 @@ void loop() {
   Serial.println("\nReading sensors...");
   readHeartRate();
   readGY521();
+  sendState();
   coap.loop();
 }
