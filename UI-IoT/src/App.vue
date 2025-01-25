@@ -42,7 +42,7 @@ USER MODELE
 }
 */
 
-const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat",""];
+const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre", "Etat", "Etat Cardiaque", "Etat Chute", ""];
 
 </script>
 
@@ -56,9 +56,9 @@ const pattern = ["NodeID","Nom","Pr&eacute;nom","Chambre","Etat",""];
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in userList" :class="[index ? 'impair' : 'pair', {alert : user.etat!=='normal'}]">
+        <tr v-for="(user, index) in userList" :class="[index ? 'impair' : 'pair', {alert : user.etat!=='connected'}]">
           <td v-for="value in Object.values(user)">{{ value }}</td>
-          <td v-if="user.etat==='normal'"><ion-icon name="checkmark-circle-outline"></ion-icon></td>
+          <td v-if="user.etat==='connected'"><ion-icon name="checkmark-circle-outline"></ion-icon></td>
           <td v-else><ion-icon name="alert-circle-outline"></ion-icon></td>
         </tr>
       </tbody>

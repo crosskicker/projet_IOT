@@ -12,13 +12,15 @@ const userList = [ {
     nom: "Martin",
     prenom: "Jean",
     chambre: 101,
-    etat: "shutdown"
+    etat: "shutdown",
+    etatCardiaque : "null",
+    etatChute : "null"
 }];
 
 // ====== COAP ======
 servCoap.on('request', (req, res) => {
-    console.log("CoAP request received");
     const url = req.url.split('/');
+    console.log(`CoAP request received : ${req.method} ${req.url}`);
 
     // Lorsqu'une montre s'allume, elle doit envoyer son nodeID sur /connect
     if (url[1]==="connect") {
@@ -28,17 +30,20 @@ servCoap.on('request', (req, res) => {
             if (wsList.length!=0) {
                 const jsonString = JSON.stringify(userList);
                 wsList[0].send(jsonString);
-                console.log("blob");
             }
         }
     }
     // une montre envoie les alertes sur /${nodeID}, ici /2025 pour la demo
     else if (url[1]==="2025"){
         // On va considérer 3 etats : normal - alerte cardiaque - alerte chute
-        userList[0].etat = url[2];
+        if (url[2]==="cardiaque") {
+            userList[0].etatCardiaque = url[3];
+        }
+        else if (url[2]==="chute") {
+            userList[0].etatChute = url[3];
+        }
         const jsonString = JSON.stringify(userList);
         wsList[0].send(jsonString);
-        console.log("blob");
     }
   res.end();
 });
